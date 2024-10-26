@@ -8,11 +8,13 @@ namespace Graphs.PlotInfo
 {
     public class Line
     {
-        public List<Point> Points;
+        public string Name { get; set; }
+        public List<Point> Points { get; set; }
         public static event EventHandler PlotUpdate;    // Raised whenever a line is updated
 
-        public Line()
+        public Line(string name)
         {
+            Name = name;
             Points = new List<Point>();
         }
 
