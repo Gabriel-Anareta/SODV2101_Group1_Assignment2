@@ -14,67 +14,50 @@ namespace Graphs
     public partial class GraphEditor : Form
     {
         private Line? CurrentLine;
+        private List<dynamic> NewLineControl;
+        private List<dynamic> EditLineControl;
+        private List<dynamic> AddPointControl;
+        private List<dynamic> DeletePointControl;
 
         public GraphEditor()
         {
             InitializeComponent();
 
+            NewLineControl = new List<dynamic>
+            {
+                lbl_LineName,
+                tb_LineName,
+                btn_AddLine
+            };
+
+            AddPointControl = new List<dynamic>
+            {
+                btn_AddPoint,
+                lbl_XValue,
+                lbl_YValue,
+                tb_XValue,
+                tb_YValue,
+            };
+
+            DeletePointControl = new List<dynamic>
+            {
+                btn_DeletePoint,
+                lbl_PointIndex,
+                tb_PointIndex,
+            };
+
+            EditLineControl = new List<dynamic>
+            {
+                dgv_LineInfo,
+                btn_OpenAddPoint,
+                btn_OpenDeletePoint,
+                btn_SaveLine
+            };
+
             CurrentLine = null;
 
             LinePlot.NewLine += UpdateLines_OnNewline;
             ms_Lines.CanOverflow = true;
-            /*// Create a new ContextMenuStrip control.
-            fruitContextMenuStrip = new ContextMenuStrip();
-
-            // Attach an event handler for the 
-            // ContextMenuStrip control's Opening event.
-            *//*fruitContextMenuStrip.Opening += new System.ComponentModel.CancelEventHandler(cms_Opening);*//*
-
-            // Create a new ToolStrip control.
-            ToolStrip ts = new ToolStrip();
-
-            // Create a ToolStripDropDownButton control and add it
-            // to the ToolStrip control's Items collections.
-            ToolStripDropDownButton fruitToolStripDropDownButton = new ToolStripDropDownButton("Fruit", null, null, "Fruit");
-            ts.Items.Add(fruitToolStripDropDownButton);
-
-            // Dock the ToolStrip control to the top of the form.
-            ts.Dock = DockStyle.Top;
-
-            // Assign the ContextMenuStrip control as the 
-            // ToolStripDropDownButton control's DropDown menu.
-            fruitToolStripDropDownButton.DropDown = fruitContextMenuStrip;
-
-            // Create a new MenuStrip control and add a ToolStripMenuItem.
-            MenuStrip ms = new MenuStrip();
-            ToolStripMenuItem fruitToolStripMenuItem = new ToolStripMenuItem("Fruit", null, null, "Fruit");
-            *//*ms.Items.Add(fruitToolStripMenuItem);*//*
-            ms.Items.Add();
-
-            // Dock the MenuStrip control to the top of the form.
-            ms.Dock = DockStyle.Top;
-
-            // Assign the MenuStrip control as the 
-            // ToolStripMenuItem's DropDown menu.
-            //fruitToolStripMenuItem.DropDown = fruitContextMenuStrip;
-
-            // Assign the ContextMenuStrip to the form's 
-            // ContextMenuStrip property.
-            *//*this.ContextMenuStrip = fruitContextMenuStrip;*//*
-
-            // Add the ToolStrip control to the Controls collection.
-            this.Controls.Add(ts);
-
-            //Add a button to the form and assign its ContextMenuStrip.
-            Button b = new Button();
-            b.Location = new System.Drawing.Point(60, 60);
-            this.Controls.Add(b);
-            b.Click += b_Click;
-            b.ContextMenuStrip = fruitContextMenuStrip;
-
-            // Add the MenuStrip control last.
-            // This is important for correct placement in the z-order.
-            this.Controls.Add(ms);*/
         }
 
         private void GraphEditor_Load(object sender, EventArgs e)
@@ -88,13 +71,31 @@ namespace Graphs
 
                 SetCurrentLine(LinePlot.Plot.First());
             }
-                
+
             SetEditingControls(windowState);
+        }
+
+        private void btn_OpenAddPoint_Click(object sender, EventArgs e)
+        {
+            SetVisibility(AddPointControl, true);
+            tb_XValue.Focus();
+        }
+
+        private void btn_OpenDeletePoint_Click(object sender, EventArgs e)
+        {
+            SetVisibility(DeletePointControl, true);
+            tb_PointIndex.Focus();
+        }
+
+        private void btn_OpenAddLine_Click(object sender, EventArgs e)
+        {
+            SetVisibility(NewLineControl, true);
+            tb_LineName.Focus();
         }
 
         private void btn_AddPoint_Click(object sender, EventArgs e)
         {
-
+            int index = dgv_LineInfo.Rows.Add();
         }
 
         private void btn_DeletePoint_Click(object sender, EventArgs e)
@@ -107,11 +108,6 @@ namespace Graphs
 
         }
 
-        private void btn_OpenAddLine_Click(object sender, EventArgs e)
-        {
-            AddLineVisibility(true);
-        }
-
         private void btn_AddLine_Click(object sender, EventArgs e)
         {
             string lineName = tb_LineName.Text.Trim();
@@ -119,12 +115,13 @@ namespace Graphs
                 return;
 
             tb_LineName.Text = "";
-            AddLineVisibility(false);
+            SetVisibility(NewLineControl, false);
 
             LinePlot.AddNewLine(new Line(lineName));
         }
 
 
+        // Event subscriber
         private void UpdateLines_OnNewline(object? sender, EventArgs e)
         {
             Line line = sender as Line;
@@ -162,36 +159,30 @@ namespace Graphs
 
         private void SetEditingControls(bool isEditable)
         {
-            EditLineVisibility(isEditable);
-            AddLineVisibility(false);
+            MoveNewLineControl(isEditable);
+            SetVisibility(EditLineControl, isEditable);
+            SetVisibility(AddPointControl, false);
+            SetVisibility(DeletePointControl, false);
+            SetVisibility(NewLineControl, false);
         }
 
-        private void AddLineVisibility(bool visibility)
+        private void SetVisibility(List<dynamic> elements, bool visibility)
         {
-            lbl_LineName.Visible = visibility;
-            tb_LineName.Visible = visibility;
-            tb_LineName.Enabled = visibility;
-            btn_AddLine.Visible = visibility;
-            btn_AddLine.Enabled = visibility;
-        }
-
-        private void EditLineVisibility(bool visibility)
-        {
-            dgv_LineInfo.Visible = visibility;
-            dgv_LineInfo.Enabled = visibility;
-            btn_AddPoint.Visible = visibility;
-            btn_AddPoint.Enabled = visibility;
-            btn_DeletePoint.Visible = visibility;
-            btn_DeletePoint.Enabled = visibility;
-            btn_SaveLine.Visible = visibility;
-            btn_SaveLine.Enabled = visibility;
-
-            if (visibility)
+            foreach (dynamic element in elements)
             {
-                btn_OpenAddLine.Location = new System.Drawing.Point(298, 218);
-                lbl_LineName.Location = new System.Drawing.Point(298, 250);
-                tb_LineName.Location = new System.Drawing.Point(298, 273);
-                btn_AddLine.Location = new System.Drawing.Point(298, 306);
+                element.Visible = visibility;
+                element.Enabled = visibility;
+            }
+        }
+
+        private void MoveNewLineControl(bool windowState)
+        {
+            if (windowState)
+            {
+                btn_OpenAddLine.Location = new System.Drawing.Point(609, 340);
+                lbl_LineName.Location = new System.Drawing.Point(609, 284);
+                tb_LineName.Location = new System.Drawing.Point(609, 307);
+                btn_AddLine.Location = new System.Drawing.Point(609, 340);
             }
             else
             {

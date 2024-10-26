@@ -8,11 +8,14 @@ namespace Graphs.PlotInfo
 {
     public class Point
     {
+        public int Index { get; private set; }
         public double X_Value { get; private set; } 
         public double Y_Value { get; private set; }
 
-        public Point(double x, double y) 
+        public Point(int index, double x, double y) 
         {
+
+            Index = index;
             X_Value = x;
             Y_Value = y;
         }
