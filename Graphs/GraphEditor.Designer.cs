@@ -61,6 +61,8 @@
             // 
             // dgv_LineInfo
             // 
+            dgv_LineInfo.AllowUserToAddRows = false;
+            dgv_LineInfo.AllowUserToDeleteRows = false;
             dgv_LineInfo.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dgv_LineInfo.Location = new Point(13, 61);
             dgv_LineInfo.Name = "dgv_LineInfo";

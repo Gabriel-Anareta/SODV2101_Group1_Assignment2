@@ -30,6 +30,14 @@ namespace Graphs.PlotInfo
             OnPlotUpdate(this, EventArgs.Empty);
         }
 
+        public void RemovePoint(Point point)
+        {
+            Points.Remove(point);
+            for (int i = 0; i < Points.Count; i++)
+                Points[i].SetValues(i + 1, Points[i].X_Value, Points[i].Y_Value);
+            OnPlotUpdate(this, EventArgs.Empty);
+        }
+
         private void OnPlotUpdate(object sender, EventArgs e)
         {
             PlotUpdate?.Invoke(sender, e);

@@ -20,8 +20,9 @@ namespace Graphs.PlotInfo
             Y_Value = y;
         }
 
-        public void SetValues(double x, double y)
+        public void SetValues(int index, double x, double y)
         {
+            Index = index;
             X_Value = x;
             Y_Value = y;
         }

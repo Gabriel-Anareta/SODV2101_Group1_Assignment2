@@ -105,25 +105,39 @@ namespace Graphs
             
             double xValue = 0;
             double yValue = 0;
-
             bool canParseX = double.TryParse(tb_XValue.Text, out xValue);
             bool canParseY = double.TryParse(tb_YValue.Text, out yValue);
 
             if (!(canParseX && canParseY))
                 return;
 
-            tb_XValue.Text = "";
-            tb_YValue.Text = "";
-            this.ActiveControl = null;
-
             int index = CurrentLine.Points.Count + 1;
             gpi.Point point = new gpi.Point(index, xValue, yValue);
             CurrentLine.AddPoint(point);
+
+            tb_XValue.Text = "";
+            tb_YValue.Text = "";
+            this.ActiveControl = null;
         }
 
         private void btn_DeletePoint_Click(object sender, EventArgs e)
         {
+            if (tb_PointIndex.Text.Trim() == "")
+                return;
 
+            int indexValue = 0;
+            bool canParseIndex = int.TryParse(tb_PointIndex.Text, out indexValue);
+
+            if (!canParseIndex)
+                return;
+
+            gpi.Point? foundPoint = CurrentLine.Points.Find(point => point.Index == indexValue);
+            if (foundPoint == null)
+                return;
+            CurrentLine.RemovePoint(foundPoint);
+
+            tb_PointIndex.Text = "";
+            this.ActiveControl = null;
         }
 
         private void btn_SaveLine_Click(object sender, EventArgs e)
