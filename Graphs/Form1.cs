@@ -1,5 +1,7 @@
 using Graphs.PlotInfo;
+using ScottPlot;
 using static System.Runtime.InteropServices.JavaScript.JSType;
+using gpi = Graphs.PlotInfo;
 
 namespace Graphs
 {
@@ -8,12 +10,12 @@ namespace Graphs
         public Form1()
         {
             InitializeComponent();
-            Line.PlotUpdate += UpdatePlot_OnPlotUpddate;
+            GraphEditor.LineUpdate += UpdatePlot_OnLineUpddate;
         }
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            foreach (Line line in LinePlot.Plot)
+            foreach (gpi.Line line in LinePlot.Plot)
                 AddLineToPlot(line);
         }
 
@@ -25,21 +27,36 @@ namespace Graphs
 
 
         // Event Subscriber
-        private void UpdatePlot_OnPlotUpddate(object? sender, EventArgs e)
+        private void UpdatePlot_OnLineUpddate(object? sender, EventArgs e)
         {
-            Line line = sender as Line;
+            gpi.Line line = sender as gpi.Line;
             AddLineToPlot(line);
+
         }
 
 
         // Helper functions
 
-        private void AddLineToPlot(Line line)
+        private void AddLineToPlot(gpi.Line line)
         {
             double[] xValues = line.AxisValues("X").ToArray();
             double[] yValues = line.AxisValues("Y").ToArray();
             
             fp_MainPlot.Plot.Add.Scatter(xValues, yValues);
+            fp_MainPlot.Plot.Axes.AutoScale();
+            fp_MainPlot.Refresh();
+        }
+
+        private void UpdatePlot()
+        {
+            fp_MainPlot.Plot.Clear();
+            foreach(gpi.Line line in LinePlot.Plot)
+            {
+                double[] xValues = line.AxisValues("X").ToArray();
+                double[] yValues = line.AxisValues("Y").ToArray();
+                fp_MainPlot.Plot.Add.Scatter(xValues, yValues);
+            }
+
             fp_MainPlot.Plot.Axes.AutoScale();
             fp_MainPlot.Refresh();
         }

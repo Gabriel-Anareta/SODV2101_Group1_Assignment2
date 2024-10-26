@@ -214,7 +214,7 @@
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(751, 456);
+            ClientSize = new Size(751, 394);
             Controls.Add(btn_OpenDeletePoint);
             Controls.Add(btn_OpenAddPoint);
             Controls.Add(tb_PointIndex);

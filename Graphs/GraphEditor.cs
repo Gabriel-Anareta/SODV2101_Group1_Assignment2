@@ -8,16 +8,20 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using sd = System.Drawing;
+using gpi = Graphs.PlotInfo;
 
 namespace Graphs
 {
     public partial class GraphEditor : Form
     {
+        public static event EventHandler LineUpdate;
         private Line? CurrentLine;
         private List<dynamic> NewLineControl;
         private List<dynamic> EditLineControl;
         private List<dynamic> AddPointControl;
         private List<dynamic> DeletePointControl;
+        
 
         public GraphEditor()
         {
@@ -57,6 +61,7 @@ namespace Graphs
             CurrentLine = null;
 
             LinePlot.NewLine += UpdateLines_OnNewline;
+            Line.PlotUpdate += UpdateData_OnPlotUpdate;
             ms_Lines.CanOverflow = true;
         }
 
@@ -95,7 +100,25 @@ namespace Graphs
 
         private void btn_AddPoint_Click(object sender, EventArgs e)
         {
-            int index = dgv_LineInfo.Rows.Add();
+            if (tb_XValue.Text.Trim() == "" || tb_YValue.Text.Trim() == "")
+                return;
+            
+            double xValue = 0;
+            double yValue = 0;
+
+            bool canParseX = double.TryParse(tb_XValue.Text, out xValue);
+            bool canParseY = double.TryParse(tb_YValue.Text, out yValue);
+
+            if (!(canParseX && canParseY))
+                return;
+
+            tb_XValue.Text = "";
+            tb_YValue.Text = "";
+            this.ActiveControl = null;
+
+            int index = CurrentLine.Points.Count + 1;
+            gpi.Point point = new gpi.Point(index, xValue, yValue);
+            CurrentLine.AddPoint(point);
         }
 
         private void btn_DeletePoint_Click(object sender, EventArgs e)
@@ -114,6 +137,9 @@ namespace Graphs
             if (lineName == "")
                 return;
 
+            if (LinePlot.Plot.Any(line => line.Name == lineName))
+                return;
+
             tb_LineName.Text = "";
             SetVisibility(NewLineControl, false);
 
@@ -121,12 +147,19 @@ namespace Graphs
         }
 
 
-        // Event subscriber
+        // Event subscribers
+
         private void UpdateLines_OnNewline(object? sender, EventArgs e)
         {
             Line line = sender as Line;
             CreateNewMenuItem(line);
             SetCurrentLine(line);
+        }
+
+        private void UpdateData_OnPlotUpdate(object? sender, EventArgs e)
+        {
+            dgv_LineInfo.DataSource = null;
+            dgv_LineInfo.DataSource = CurrentLine.Points;
         }
 
 
@@ -179,17 +212,17 @@ namespace Graphs
         {
             if (windowState)
             {
-                btn_OpenAddLine.Location = new System.Drawing.Point(609, 340);
-                lbl_LineName.Location = new System.Drawing.Point(609, 284);
-                tb_LineName.Location = new System.Drawing.Point(609, 307);
-                btn_AddLine.Location = new System.Drawing.Point(609, 340);
+                btn_OpenAddLine.Location = new sd.Point(609, 340);
+                lbl_LineName.Location = new sd.Point(609, 284);
+                tb_LineName.Location = new sd.Point(609, 307);
+                btn_AddLine.Location = new sd.Point(609, 340);
             }
             else
             {
-                btn_OpenAddLine.Location = new System.Drawing.Point(13, 73);
-                lbl_LineName.Location = new System.Drawing.Point(13, 105);
-                tb_LineName.Location = new System.Drawing.Point(13, 128);
-                btn_AddLine.Location = new System.Drawing.Point(13, 161);
+                btn_OpenAddLine.Location = new sd.Point(13, 73);
+                lbl_LineName.Location = new sd.Point(13, 105);
+                tb_LineName.Location = new sd.Point(13, 128);
+                btn_AddLine.Location = new sd.Point(13, 161);
             }
         }
     }
