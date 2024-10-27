@@ -26,12 +26,6 @@ namespace Graphs.PlotInfo
             OnPlotUpdate(this, EventArgs.Empty);
         }
 
-        public void SetPoints(List<Point> points)
-        {
-            Points = points;
-            OnPlotUpdate(this, EventArgs.Empty);
-        }
-
         public void RemovePoint(Point point)
         {
             Points.Remove(point);

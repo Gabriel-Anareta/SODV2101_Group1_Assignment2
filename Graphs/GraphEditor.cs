@@ -102,9 +102,11 @@ namespace Graphs
 
         private void btn_AddPoint_Click(object sender, EventArgs e)
         {
+            // Check for empty values
             if (tb_XValue.Text.Trim() == "" || tb_YValue.Text.Trim() == "")
                 return;
 
+            // Get parsed values
             double xValue = 0;
             double yValue = 0;
             bool canParseX = double.TryParse(tb_XValue.Text, out xValue);
@@ -124,9 +126,11 @@ namespace Graphs
 
         private void btn_DeletePoint_Click(object sender, EventArgs e)
         {
+            // Check for empty values
             if (tb_PointIndex.Text.Trim() == "")
                 return;
 
+            // Get parsed values
             int indexValue = 0;
             bool canParseIndex = int.TryParse(tb_PointIndex.Text, out indexValue);
 
@@ -145,9 +149,12 @@ namespace Graphs
         private void btn_AddLine_Click(object sender, EventArgs e)
         {
             string lineName = tb_LineName.Text.Trim();
+
+            // Check for empty values
             if (lineName == "")
                 return;
 
+            // Check for values that already exist
             if (LinePlot.Plot.Any(line => line.Name == lineName))
                 return;
 
@@ -183,7 +190,7 @@ namespace Graphs
 
         // Helper functions
 
-        private void CreateNewMenuItem(Line line)
+        private void CreateNewMenuItem(Line line) // Creates tabs for top bar
         {
             ToolStripMenuItem lineItem = new ToolStripMenuItem(line.Name);
             lineItem.Overflow = ToolStripItemOverflow.AsNeeded;
@@ -219,7 +226,7 @@ namespace Graphs
             SetVisibility(NewLineControl, false);
         }
 
-        private void SetVisibility(List<dynamic> elements, bool visibility)
+        private void SetVisibility(List<dynamic> elements, bool visibility) // used to simplify visibility controls
         {
             foreach (dynamic element in elements)
             {
@@ -247,7 +254,5 @@ namespace Graphs
                 btn_AddLine.Location = new sd.Point(13, 161);
             }
         }
-
-        
     }
 }

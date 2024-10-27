@@ -14,7 +14,6 @@ namespace Graphs.PlotInfo
 
         public Point(int index, double x, double y) 
         {
-
             Index = index;
             X_Value = x;
             Y_Value = y;
