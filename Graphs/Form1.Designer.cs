@@ -30,6 +30,7 @@
         {
             btn_EditGraph = new Button();
             fp_MainPlot = new ScottPlot.WinForms.FormsPlot();
+            btn_RefreshGraph = new Button();
             SuspendLayout();
             // 
             // btn_EditGraph
@@ -50,11 +51,22 @@
             fp_MainPlot.Size = new Size(688, 342);
             fp_MainPlot.TabIndex = 3;
             // 
+            // btn_RefreshGraph
+            // 
+            btn_RefreshGraph.Location = new Point(594, 409);
+            btn_RefreshGraph.Name = "btn_RefreshGraph";
+            btn_RefreshGraph.Size = new Size(133, 29);
+            btn_RefreshGraph.TabIndex = 4;
+            btn_RefreshGraph.Text = "Refresh Graph";
+            btn_RefreshGraph.UseVisualStyleBackColor = true;
+            btn_RefreshGraph.Click += btn_RefreshGraph_Click;
+            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 450);
+            Controls.Add(btn_RefreshGraph);
             Controls.Add(fp_MainPlot);
             Controls.Add(btn_EditGraph);
             Name = "Form1";
@@ -69,5 +81,6 @@
         private Button btn_EditGraph;
         private Button btn_DeleteRow;
         private ScottPlot.WinForms.FormsPlot fp_MainPlot;
+        private Button btn_RefreshGraph;
     }
 }

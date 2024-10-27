@@ -17,11 +17,13 @@ namespace Graphs
     {
         public static event EventHandler LineUpdate;
         private Line? CurrentLine;
+
+        // groups form elements for easier handling of element visibility
         private List<dynamic> NewLineControl;
         private List<dynamic> EditLineControl;
         private List<dynamic> AddPointControl;
         private List<dynamic> DeletePointControl;
-        
+
 
         public GraphEditor()
         {
@@ -55,7 +57,7 @@ namespace Graphs
                 dgv_LineInfo,
                 btn_OpenAddPoint,
                 btn_OpenDeletePoint,
-                btn_SaveLine
+                btn_CloseWindow
             };
 
             CurrentLine = null;
@@ -102,7 +104,7 @@ namespace Graphs
         {
             if (tb_XValue.Text.Trim() == "" || tb_YValue.Text.Trim() == "")
                 return;
-            
+
             double xValue = 0;
             double yValue = 0;
             bool canParseX = double.TryParse(tb_XValue.Text, out xValue);
@@ -140,11 +142,6 @@ namespace Graphs
             this.ActiveControl = null;
         }
 
-        private void btn_SaveLine_Click(object sender, EventArgs e)
-        {
-
-        }
-
         private void btn_AddLine_Click(object sender, EventArgs e)
         {
             string lineName = tb_LineName.Text.Trim();
@@ -173,7 +170,14 @@ namespace Graphs
         private void UpdateData_OnPlotUpdate(object? sender, EventArgs e)
         {
             dgv_LineInfo.DataSource = null;
-            dgv_LineInfo.DataSource = CurrentLine.Points;
+            dgv_LineInfo.DataSource = CurrentLine.Points
+                .OrderBy(point => point.Index)
+                .ToList();
+        }
+
+        private void btn_CloseWindw_Click(object sender, EventArgs e)
+        {
+            this.Close();
         }
 
 
@@ -201,10 +205,12 @@ namespace Graphs
         {
             CurrentLine = line;
             lbl_CurrentLine.Text = $"Current Line: {CurrentLine.Name}";
-            dgv_LineInfo.DataSource = CurrentLine.Points;
+            dgv_LineInfo.DataSource = CurrentLine.Points
+                .OrderBy(point => point.Index)
+                .ToList();
         }
 
-        private void SetEditingControls(bool isEditable)
+        private void SetEditingControls(bool isEditable) // controls when certain elements should be displayed
         {
             MoveNewLineControl(isEditable);
             SetVisibility(EditLineControl, isEditable);
@@ -226,6 +232,7 @@ namespace Graphs
         {
             if (windowState)
             {
+                // Positions for adding line when at least one line is present
                 btn_OpenAddLine.Location = new sd.Point(609, 340);
                 lbl_LineName.Location = new sd.Point(609, 284);
                 tb_LineName.Location = new sd.Point(609, 307);
@@ -233,11 +240,14 @@ namespace Graphs
             }
             else
             {
+                // Positions for adding line when no lines are present
                 btn_OpenAddLine.Location = new sd.Point(13, 73);
                 lbl_LineName.Location = new sd.Point(13, 105);
                 tb_LineName.Location = new sd.Point(13, 128);
                 btn_AddLine.Location = new sd.Point(13, 161);
             }
         }
+
+        
     }
 }

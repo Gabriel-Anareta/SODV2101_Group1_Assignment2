@@ -33,7 +33,7 @@
             ms_Lines = new MenuStrip();
             btn_AddPoint = new Button();
             btn_DeletePoint = new Button();
-            btn_SaveLine = new Button();
+            btn_CloseWindow = new Button();
             lbl_LineName = new Label();
             tb_LineName = new TextBox();
             btn_AddLine = new Button();
@@ -99,15 +99,15 @@
             btn_DeletePoint.UseVisualStyleBackColor = true;
             btn_DeletePoint.Click += btn_DeletePoint_Click;
             // 
-            // btn_SaveLine
+            // btn_CloseWindow
             // 
-            btn_SaveLine.Location = new Point(363, 339);
-            btn_SaveLine.Name = "btn_SaveLine";
-            btn_SaveLine.Size = new Size(100, 29);
-            btn_SaveLine.TabIndex = 6;
-            btn_SaveLine.Text = "Save Line";
-            btn_SaveLine.UseVisualStyleBackColor = true;
-            btn_SaveLine.Click += btn_SaveLine_Click;
+            btn_CloseWindow.Location = new Point(363, 339);
+            btn_CloseWindow.Name = "btn_CloseWindow";
+            btn_CloseWindow.Size = new Size(100, 29);
+            btn_CloseWindow.TabIndex = 6;
+            btn_CloseWindow.Text = "View Plots";
+            btn_CloseWindow.UseVisualStyleBackColor = true;
+            btn_CloseWindow.Click += btn_CloseWindw_Click;
             // 
             // lbl_LineName
             // 
@@ -229,7 +229,7 @@
             Controls.Add(btn_AddLine);
             Controls.Add(tb_LineName);
             Controls.Add(lbl_LineName);
-            Controls.Add(btn_SaveLine);
+            Controls.Add(btn_CloseWindow);
             Controls.Add(btn_DeletePoint);
             Controls.Add(btn_AddPoint);
             Controls.Add(ms_Lines);
@@ -250,7 +250,7 @@
         private MenuStrip ms_Lines;
         private Button btn_AddPoint;
         private Button btn_DeletePoint;
-        private Button btn_SaveLine;
+        private Button btn_CloseWindow;
         private Label lbl_LineName;
         private TextBox tb_LineName;
         private Button btn_AddLine;
